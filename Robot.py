@@ -231,9 +231,10 @@ class Robot:
                 scatter.remove()
             
             T = T_euler(slider_a.val, slider_b.val, slider_x.val, slider_y.val, slider_z.val)
-            circ = self.getCirclePoints(T, n = 25)
-            cx, cy, cz = circ.T
-            ax.plot(cx,cy,cz,'orange')
+            if btn2state:
+                circ = self.getCirclePoints(T, n = 25)
+                cx, cy, cz = circ.T
+                ax.plot(cx,cy,cz,'orange')
 
             sols = self.numIK(T, n=circ_res)
             for i in range(np.min([len(sols),8])):
@@ -277,6 +278,14 @@ class Robot:
                 
             fig.canvas.draw_idle()
         btn.on_clicked(btn_action)
+
+        ax_btn2 = fig.add_axes([0.5, 0.1, 0.4, 0.07])
+        btn2 = Button(ax_btn2, 'Plot circle around joint 6')
+        btn2state = True
+        def btn2_action(event):
+            nonlocal btn2state
+            btn2state = not btn2state
+        btn2.on_clicked(btn2_action)
 
         plt.show()
     
